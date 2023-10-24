@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using ApiRestBilling.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ApiRestBilling.Data
 {
@@ -10,5 +11,12 @@ namespace ApiRestBilling.Data
         {
 
         }
+        public DbSet<Supplier> Suppliers { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Order> orders { get; set; }
+        public DbSet<OrderItem> ordersItem { get; set; }
+        public DbSet<Product> products { get; set; }
+
+
     }
 }
