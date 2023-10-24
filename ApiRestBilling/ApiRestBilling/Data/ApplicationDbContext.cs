@@ -13,9 +13,9 @@ namespace ApiRestBilling.Data
         }
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<Customer> Customers { get; set; }
-        public DbSet<Order> orders { get; set; }
-        public DbSet<OrderItem> ordersItem { get; set; }
-        public DbSet<Product> products { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrdersItem { get; set; }
+        public DbSet<Product> Products { get; set; }
 
 
     }
