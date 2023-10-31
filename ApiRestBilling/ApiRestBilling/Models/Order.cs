@@ -9,15 +9,15 @@ namespace ApiRestBilling.Models
         public int Id { get; set; }
         [Required]
         public DateTime OrderDate { get; set; } //= DateTime.Now;
-        [MaxLength(128)]
-        public string OrderNumber { get; set; } //= Guid.NewGuid(); // Establece un nuevo GUID por defecto
 
-       // [Required]
+        public Guid OrderNumber { get; set; } //= Guid.NewGuid(); // Establece un nuevo GUID por defecto
+
+       [Required]
         public int? CustomerId { get; set; }
         public decimal TotalAmount { get; set; } = 0;
 
         [ForeignKey("CustomerId")]
-        public Customer Customer { get; set; }
+        public Customer? Customer { get; set; }
         public virtual ICollection<OrderItem>? OrderItems { get; set; }
 
     }
