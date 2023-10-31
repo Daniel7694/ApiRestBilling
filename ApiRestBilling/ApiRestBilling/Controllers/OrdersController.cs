@@ -1,5 +1,6 @@
 ﻿using ApiRestBilling.Data;
 using ApiRestBilling.Models;
+using ApiRestBilling.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,10 +14,12 @@ namespace ApiRestBilling.Controllers
     {
 
         private readonly ApplicationDbContext _context;
+        private readonly IPurchaseOrdersService _purchaseOrdersService;
 
-        public OrdersController(ApplicationDbContext context)
+        public OrdersController(ApplicationDbContext context, IPurchaseOrdersService purchaseOrdersService)
         {
-            this._context = context;
+            _context = context;
+            _purchaseOrdersService = purchaseOrdersService;
         }
         // GET: api/<OrdersController>
         [HttpGet]
@@ -49,15 +52,26 @@ namespace ApiRestBilling.Controllers
 
         // POST api/<OrdersController>
         [HttpPost]
-        public async Task<ActionResult<Order>> Post([FromBody] Order Order)
+        public async Task<ActionResult<Order>> PostOrder(Order Order)
         {
             if (_context.Orders == null)
             {
                 return Problem("Entity set 'ApplicationDbContext.Orders'  is null.");
             }
+
+            foreach (var detalle in Order.OrderItems)
+            {
+                detalle.UnitPrice = await _purchaseOrdersService.CheckUnitPrice(detalle);
+
+                detalle.Subtotal = await _purchaseOrdersService.CalculateSubtotalOrderItem(detalle);
+            }
+
+            Order.TotalAmount = _purchaseOrdersService.CalcularTotalOrderItems((List<OrderItem>)Order.OrderItems);
+
             _context.Orders.Add(Order);
             await _context.SaveChangesAsync();
-            return CreatedAtAction("Get", new { id = Order.Id }, Order);
+
+            return CreatedAtAction("GetOrder", new { id = Order.Id }, Order);
         }
 
         // PUT api/<OrdersController>/5
