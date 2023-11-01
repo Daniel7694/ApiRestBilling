@@ -71,7 +71,7 @@ namespace ApiRestBilling.Controllers
             _context.Orders.Add(Order);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetOrder", new { id = Order.Id }, Order);
+            return CreatedAtAction("Get", new { id = Order.Id }, Order);
         }
 
         // PUT api/<OrdersController>/5
